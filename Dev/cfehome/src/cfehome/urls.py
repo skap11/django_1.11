@@ -15,7 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic import TemplateView
+from restaurant.views import (
+    RestaurantListView,
+    RestaurantDetailView,
+    restaurant_createview,
+    RestaurantLocationCreate
+)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', TemplateView.as_view(template_name='home.html')), #Can i pass context variables through the url using TemplateView
+    url(r'^restaurant/$', RestaurantListView.as_view()),
+    url(r'^restaurant/create/$', RestaurantLocationCreate.as_view()),
+    url(r'^restaurant/(?P<slug>[\w-]+)/$', RestaurantDetailView.as_view()),
+    #url(r'^restaurant/(?P<slug>\w+)/$', RestaurantListView.as_view()),
 ]
