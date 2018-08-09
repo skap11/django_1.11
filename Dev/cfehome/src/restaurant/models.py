@@ -3,13 +3,13 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
-
+from .validators import validate_email, validate_category
 # Create your models here.
 
 
 class RestaurantLocation(models.Model):
     name        = models.CharField(max_length=120)
-    category    = models.CharField(max_length=120, blank=True, null=True)
+    category    = models.CharField(max_length=120, blank=True, null=True, validators=[validate_category])
     location    = models.CharField(max_length=120, blank=True, null=True)
     timestamp   = models.DateTimeField(auto_now_add=True)
     updated_on  = models.DateTimeField(auto_now=True)
@@ -23,7 +23,7 @@ class RestaurantLocation(models.Model):
         return self.name
 
 
-def rl_pre_save_receiver(sender,instance, *args, **kwargs):
+def rl_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
